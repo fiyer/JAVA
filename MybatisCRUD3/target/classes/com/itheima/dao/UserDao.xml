@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.dao.UserDao">
+    <!--查询所有用户-->
+    <select id="findAll" resultType="com.itheima.domain.User">
+        select * from user ;
+    </select>
+    <!-- 根据 id 查询 -->
+    <select id="findById" resultType="com.itheima.domain.User" parameterType="int">
+select * from user where id = #{uid}
+</select>
+    <!-- 保存用户-->
+    <insert id="saveUser" parameterType="USER">
+        <!-- 配置保存时获取插入的 id -->
+        <selectKey keyColumn="id" keyProperty="id" resultType="int">
+            select last_insert_id();
+        </selectKey>
+        insert into user(username,birthday,sex,address)values(#{username},#{birthday},#{sex},#{address})
+    </insert>
+    <!--新增用户后，同时还要返回当前新增用户的 id 值，因为 id 是由数据库的自动增长来实现的，所以就相
+    当于我们要在新增后将自动增长 auto_increment 的值返回。-->
+    <!-- 更新用户 -->
+    <update id="updateUser" parameterType="com.itheima.domain.User">
+        update user set username=#{username},birthday=#{birthday},sex=#{sex},address=#{address} where id=#{id}
+        </update>
+    <!-- 删除用户 -->
+    <delete id="deleteUser" parameterType="java.lang.Integer">
+        delete from user where id = #{uid}
+        </delete>
+    <!-- 根据名称模糊查询 -->
+    <select id="findByName" resultType="com.itheima.domain.User" parameterType="String">
+	select * from user where username like #{username}
+</select>
+    <!-- 查询总记录条数 -->
+    <select id="findTotal" resultType="int">
+	select count(*) from user;
+</select>
+</mapper>
+
+
+
+
+
